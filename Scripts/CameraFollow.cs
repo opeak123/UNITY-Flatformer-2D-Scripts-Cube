@@ -12,6 +12,7 @@ public class CameraFollow : MonoBehaviour
 
     //카메라가 추적중인지 여부 
     public bool followTarget = true;
+    private bool b_cameraStop = true;
     void LateUpdate()
     {
         if (followTarget)
@@ -20,6 +21,12 @@ public class CameraFollow : MonoBehaviour
             // 부드러운 이동을 위한 보간 계산
             Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, m_smoothSpeed);
             transform.position = smoothedPosition; 
+        }
+
+        if (GameManager.Instance.currentStageNum == 2 && b_cameraStop)
+        {
+            Camera.main.transform.position = new Vector3(transform.position.x + 4, transform.position.y, transform.position.z);
+            b_cameraStop = false;
         }
     }
 }

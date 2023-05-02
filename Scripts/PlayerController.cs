@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         //할당
-        m_whatIsGround = LayerMask.NameToLayer("Ground");
+        m_whatIsGround = LayerMask.GetMask("Ground");// LayerMask.NameToLayer("Ground");
         m_groundCheck = GetComponent<Transform>();
         rb = GetComponent<Rigidbody2D>();
         playerAnimation = GetComponent<PlayerAnimation>();
@@ -76,6 +76,7 @@ public class PlayerController : MonoBehaviour
         {
             float moveInputY = Input.GetAxis("Vertical");
             CameraFollow.FindObjectOfType<CameraFollow>().followTarget = true;
+            playerAnimation.TriggerLookingUp();
             rb.gravityScale = 0;
             rb.velocity = new Vector2(rb.velocity.x, moveInputY * m_moveSpeed) / 2;
         }
@@ -91,6 +92,7 @@ public class PlayerController : MonoBehaviour
     {
         //Physics , 땋에 닿았는지 반지름 체크 , 애니메이션 재생
         b_isGrounded = Physics2D.OverlapCircle(m_groundCheck.position, m_groundCheckRadius, m_whatIsGround);
+        //Collider2D[] asd = Physics2D.OverlapCircleAll(m_groundCheck.position, m_groundCheckRadius, m_whatIsGround);
         playerAnimation.SetIsGrounded(b_isGrounded);
 
         if (b_isGrounded)
@@ -161,7 +163,7 @@ public class PlayerController : MonoBehaviour
         }
         if (collision.gameObject.layer == 3)
         {
-            b_isJumping = false;
+             b_isJumping = false;
         }
     }
 
@@ -172,7 +174,6 @@ public class PlayerController : MonoBehaviour
         {
             b_isWallSliding = true;
         }
-
     }
 
     private void OnCollisionExit2D(Collision2D collision)
