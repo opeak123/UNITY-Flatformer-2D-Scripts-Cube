@@ -14,7 +14,7 @@ public class CubeStageThree : MonoBehaviour
     }
     void LateUpdate()
     {
-        m_random = Random.Range(0.005f, 0.009f);
+        m_random = Random.Range(0.015f, 0.03f);
         transform.position = Vector2.MoveTowards(transform.position, m_target, m_random);
         transform.parent = GameObject.Find("TARGET").transform;
     }

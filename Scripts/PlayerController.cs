@@ -76,7 +76,6 @@ public class PlayerController : MonoBehaviour
         {
             float moveInputY = Input.GetAxis("Vertical");
             CameraFollow.FindObjectOfType<CameraFollow>().followTarget = true;
-            playerAnimation.TriggerLookingUp();
             rb.gravityScale = 0;
             rb.velocity = new Vector2(rb.velocity.x, moveInputY * m_moveSpeed) / 2;
         }

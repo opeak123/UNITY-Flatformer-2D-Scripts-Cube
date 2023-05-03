@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 public class UIAnimation : MonoBehaviour
 {
@@ -20,4 +21,5 @@ public class UIAnimation : MonoBehaviour
         //Dialogue Manager
         UIanimator.SetTrigger("close");
     }
+
 }

@@ -19,7 +19,7 @@ public class CubeFollowingTarget : MonoBehaviour
     //타겟 배열의 인덱스 
     private int m_currentTargetIndex = 0;
     //큐브의 이동속도
-    private float m_moveSpeed; //랜덤 0.2 ~ 0.5
+    private float m_moveSpeed; //랜덤 0.5~ 0.8
     //타겟과의 거리 추적
     Vector2 m_dir;
     private void Start()
@@ -60,12 +60,8 @@ public class CubeFollowingTarget : MonoBehaviour
         if (Vector2.Distance(transform.position, m_targets[m_currentTargetIndex].transform.position) < 0.05f)
         {
             m_currentTargetIndex++;
-            //if (m_currentTargetIndex == m_targets.Length - 1) // 배열 마지막 충돌 처리
-            //{
-            //    Debug.Log("reach");
-            //}    
         }
-        m_moveSpeed = Random.Range(0.2f, 0.5f);
+        m_moveSpeed = Random.Range(0.8f, 1.2f);
     }
 
     private void OnCollisionStay2D(Collision2D col)

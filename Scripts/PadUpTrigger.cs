@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class PadUpTrigger : MonoBehaviour
 {
-    Animator m_ani;
-    SpriteRenderer m_spriteRenderer;
+    private Animator m_ani;
+    private SpriteRenderer m_spriteRenderer;
+    public NextStage stage_script;
     public bool pb_triggerEnd = false;
     int m_count = 0;
-    public NextStage stage_script;
+
     private void Start()
     {
         m_spriteRenderer = GetComponent<SpriteRenderer>();
@@ -39,7 +40,7 @@ public class PadUpTrigger : MonoBehaviour
             {
                 if (PlayerController.FindObjectOfType<PlayerController>().pb_isCrouch == false)
                 {
-                    DialogueManager.Instance.isTalking = true;
+                    DialogueManager.Instance.pb_isTalking = true;
                     m_count++;
                     Interact();
                 }
@@ -66,16 +67,13 @@ public class PadUpTrigger : MonoBehaviour
 
     private void Interact()
     {
-        PlayerAnimation playerAni = FindObjectOfType<PlayerAnimation>();
-        UIAnimation uiAni = FindObjectOfType<UIAnimation>();
         PlayerController.FindObjectOfType<PlayerController>().pb_isCrouch = false;
         ScreenAnimation.FindObjectOfType<ScreenAnimation>().TriggerMove();
-        GameManager.Instance.canMove = false;
-        m_spriteRenderer.enabled = false;
-
+        PlayerAnimation playerAni = FindObjectOfType<PlayerAnimation>();
         playerAni.SetIsGrounded(false);
         playerAni.TriggerLookingUp();
-        uiAni.TriggerOpen();
+
+        m_spriteRenderer.enabled = false;
     }
 
     IEnumerator NextSceneDelay()

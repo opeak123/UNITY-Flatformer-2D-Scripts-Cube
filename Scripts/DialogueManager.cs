@@ -2,7 +2,6 @@ using System.Collections;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-
 public class DialogueManager : MonoBehaviour
 {
     //DialogueManager 인스턴스 선언
@@ -24,17 +23,33 @@ public class DialogueManager : MonoBehaviour
     //Text 2번
     public Text m_textYours;
 
+    //Image 1번
+    public Image m_myImage;
+    //Image 2번
+    public Image m_yoursImage;
+    //바꿀 이미지 yours
+    public Sprite m_crusherImage;
+    //바꿀 이미지 mine
+    //public Sprite m_mineImage;
+
     //문자열 내용
     [TextArea(3, 8)]
     public string[] m_string;
 
     //대화중인지 여부 체크
-    public bool isTalking = false;
+    public bool pb_isTalking = false;
     //대화중인 현재 스트링 Index
     private int m_currentIndex = 0;
 
+    //Canvas 애니메이션
+    [SerializeField]
+    private UIAnimation m_uiAni;
+
     private void Start()
     {
+        //할당
+        m_uiAni= FindObjectOfType<UIAnimation>();
+
         //String 초기화
         m_textMine.text = "";
         m_textYours.text = "";
@@ -42,12 +57,17 @@ public class DialogueManager : MonoBehaviour
 
     private void Update()
     {
-        if(isTalking)
+        if(pb_isTalking)
+        {
           Talking();
+        }
     }
 
     void Talking()
     {
+        m_uiAni.TriggerOpen(); //Dialouge 컨버스 활성화 
+        GameManager.Instance.canMove = false; //대화 중일 때 플레이어 행동 제어
+        
         if (Input.GetKeyDown(KeyCode.Space))
         {
             //currentIndex 가 string 배열의 크기보다 작다면
@@ -71,39 +91,57 @@ public class DialogueManager : MonoBehaviour
             }
             else
             {
-                isTalking = false;
+                pb_isTalking = false;
             }
         }
-        //string배열의 text가 6번째라면 인덱스를 처음으로 돌린다
+        //string배열의 text가 마지막배열이라면 인덱스를 처음으로 돌린다
         //현재 UI는 동시에 대화창을 띄워 순서만 바꾸는 형식
-        //(Text 둘다 동시출력)
-        if(m_currentIndex == 6) 
+        //Text는 두개 모두 동시출력
+        if (m_currentIndex == m_string.Length - 1)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            m_currentIndex++;
+            pb_isTalking = false;
+            StartCoroutine(StandbyAction());
+            StartCoroutine(UIClose());
+
+            if (GameManager.Instance.currentStageNum == 0) 
             {
-                Interact();
-                m_currentIndex++;
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    StageOneInteract();
+                }
             }
         }
     }
+
+    //대화가 끝나고 2초대기 이후 코루틴 실행
+    IEnumerator StandbyAction() 
+    {
+        yield return new WaitForSeconds(5f);
+        GameManager.Instance.canMove = true;
+        m_uiAni.TriggerClose();
+    }
+    IEnumerator UIClose()
+    {
+        yield return new WaitForSeconds(5f);
+        UIAnimation.FindObjectOfType<UIAnimation>().TriggerClose();
+    }
+
+
 
     //애니메이션 상호작용
     //위 함수가 실행중일 때 게임매니저에서 플레이어 이동 제한
-    void Interact()
+    void StageOneInteract()
     {
         PadUpTrigger.FindObjectOfType<PadUpTrigger>().pb_triggerEnd = true;
         ScreenAnimation.FindObjectOfType<ScreenAnimation>().TriggerWarning();
-        StartCoroutine(TriggerDoorOpenWithDelay(3f));
-        GameManager.Instance.canMove = true;
+        StartCoroutine(DoorOpenDelay());
     }
-
     //애니메이션이 끝나고 코루틴을 통해 애니메이션 대기 실행
-    IEnumerator TriggerDoorOpenWithDelay(float delay)
+    IEnumerator DoorOpenDelay()
     {
-        UIAnimation.FindObjectOfType<UIAnimation>().TriggerClose();
-        yield return new WaitForSeconds(delay);
-
         DoorAnimation.FindObjectOfType<DoorAnimation>().TriggerDoorOpen();
-        yield return new WaitForSeconds(delay+delay);
+        yield return new WaitForSeconds(6f);
     }
+
 }    

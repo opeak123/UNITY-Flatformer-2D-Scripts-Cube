@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     //플레이어 이동 제한
     public bool canMove = true;
-
+    public bool dead = false;
     # region 싱글톤
     void Awake()
     {
