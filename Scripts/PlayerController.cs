@@ -9,16 +9,16 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;                     //플레이어 RigidBody2D
     private PlayerAnimation playerAnimation;    //플레이어 애니메이션
 
-    private float m_moveSpeed = 3f;       //플레이어 이동속도
-    private float m_jumpForce = 5f;       //플레이어 점프높이
-    private bool b_isJumping = false;     //플레이어 점프여부
-    private bool b_isGrounded;            //플레이어가 바닥에 닿았는지 체크
-    private float m_groundCheckRadius = 0.2f;   //Ground 체크 반지름
-    private LayerMask m_whatIsGround;           //Layer 3번 - Ground 
-    private Transform m_groundCheck;      //플레이어 Transform           
-    private float m_moveInputX;           //플레이어 X값 키 방향
-    private float m_dashTime;             //플레이어 Dash 시간체크
-    private float m_dashPower = 4000f;    //플레이어 Dash 파워
+    private float m_moveSpeed = 3f;              //플레이어 이동속도
+    private float m_jumpForce = 5f;              //플레이어 점프높이
+    private bool b_isJumping = false;            //플레이어 점프여부
+    private bool b_isGrounded;                   //플레이어가 바닥에 닿았는지 체크
+    private float m_groundCheckRadius = 0.2f;    //Ground 체크 반지름
+    private LayerMask m_whatIsGround;            //Layer 3번 - Ground 
+    private Transform m_groundCheck;             //플레이어 Transform           
+    private float m_moveInputX;                  //플레이어 X값 키 방향
+    private float m_dashTime;                   //플레이어 Dash 시간체크
+    private float m_dashPower = 4000f;          //플레이어 Dash 파워
     private bool b_isDashing = false;     //플레이어 Dash 중인지 체크
     private bool b_laddering = false;     //플레이어가 사다리에 올랐는지 체크
     private bool b_isWallSliding = false; //플레이어가 벽에 닿았는지 체크
@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         //할당
-        m_whatIsGround = LayerMask.GetMask("Ground");// LayerMask.NameToLayer("Ground");
+        m_whatIsGround = LayerMask.GetMask("Ground"); // LayerMask.NameToLayer("Ground");
         m_groundCheck = GetComponent<Transform>();
         rb = GetComponent<Rigidbody2D>();
         playerAnimation = GetComponent<PlayerAnimation>();
@@ -91,7 +91,6 @@ public class PlayerController : MonoBehaviour
     {
         //Physics , 땋에 닿았는지 반지름 체크 , 애니메이션 재생
         b_isGrounded = Physics2D.OverlapCircle(m_groundCheck.position, m_groundCheckRadius, m_whatIsGround);
-        //Collider2D[] asd = Physics2D.OverlapCircleAll(m_groundCheck.position, m_groundCheckRadius, m_whatIsGround);
         playerAnimation.SetIsGrounded(b_isGrounded);
 
         if (b_isGrounded)
@@ -100,12 +99,13 @@ public class PlayerController : MonoBehaviour
             //애니메이션 재생
             playerAnimation.SetSpeed(Mathf.Abs(m_moveInputX));
 
-            if (Input.GetKeyDown(KeyCode.Space) && !b_isJumping)
+            if (Input.GetKey(KeyCode.Space) && !b_isJumping)
             {
                 b_isJumping = true;
                 rb.velocity = Vector2.up * m_jumpForce;
                 playerAnimation.TriggerJump();
             }
+
         }
 
         //플레이어 Dash 부분 구현 , 애니메이션 재생

@@ -10,9 +10,9 @@ public class ArmoredCrusher : MonoBehaviour
     private Animator m_dustAni;
     private Transform m_crucherTransform;
     private Transform m_playerTransform;
-    public bool b_crusherisGround = false;
-    public bool b_crusherFloowing = false;
-    public bool b_crusherFire = false;
+    private bool b_crusherisGround = false;
+    private bool b_crusherFloowing = false;
+    private bool b_crusherFire = false;
     Coroutine firingCoroutine;
 
     private void Start()
@@ -27,7 +27,7 @@ public class ArmoredCrusher : MonoBehaviour
     {
         CrusherTracePlayer();
 
-        if(b_crusherFire)
+        if (b_crusherFire)
         {
             CrusherAttack();
         }
@@ -36,14 +36,14 @@ public class ArmoredCrusher : MonoBehaviour
     void CrusherTracePlayer()
     {
         Vector2 targetPosition = new Vector2(m_playerTransform.position.x, m_crucherTransform.position.y);
-        if (b_crusherisGround && b_crusherFloowing && !DialogueManager.Instance.pb_isTalking)
+        if(b_crusherisGround && b_crusherFloowing && !DialogueManager.Instance.pb_isTalking)
         {
-            m_crucherTransform.position = Vector2.MoveTowards(m_crucherTransform.position,targetPosition, 0.0035f);
+            m_crucherTransform.position = Vector2.MoveTowards(m_crucherTransform.position, targetPosition, 0.01f);
         }
     }
     void CrusherAttack()
     {
-        if (firingCoroutine == null)
+        if (firingCoroutine == null && !DialogueManager.Instance.pb_isTalking)
         {
             firingCoroutine = StartCoroutine(FireBullets());
         }
@@ -54,7 +54,8 @@ public class ArmoredCrusher : MonoBehaviour
         while (true)
         {
             GameObject go = Instantiate(m_bulletPrefab, m_firePos.position, Quaternion.identity);
-            Rigidbody2D rb = go.GetComponent<Rigidbody2D>(); // 새로 생성한 총알 오브젝트를 사용
+            go.gameObject.transform.parent = m_firePos.transform;
+            Rigidbody2D rb = go.GetComponent<Rigidbody2D>();
             rb.velocity = BulletParabola();
             yield return new WaitForSeconds(1f);
             Destroy(go);
@@ -63,12 +64,12 @@ public class ArmoredCrusher : MonoBehaviour
 
     Vector2 BulletParabola()
     {
-        float angle = -15f; // 발사각도 (45도)
-        float speed = 6f; // 발사속력 (10 유니트/초)
+        float angle = -10f; // 발사 각도
+        float speed = 2.2f; // 발사 속력
         float gravity = Physics2D.gravity.magnitude; // 중력 가속도
 
-        // x 방향으로는 일정한 속력으로 총알을 날리고,
-        // y 방향으로는 중력 가속도에 따라 점점 더 느리게 날아가도록 설정합니다.
+        // x 방향으로 일정한 속력
+        // y 방향으로 중력 가속도
         float radian = angle * Mathf.Deg2Rad;
         float xSpeed = speed * Mathf.Cos(radian);
         float ySpeed = speed * Mathf.Sin(radian);
@@ -91,31 +92,25 @@ public class ArmoredCrusher : MonoBehaviour
                 b_crusherisGround = true;
                 transform.GetChild(1).gameObject.SetActive(true);
                 RoadManAnimation.FindObjectOfType<RoadManAnimation>().BooleanFly();
-                StartCoroutine(SetTime());
-                //Destroy(GameObject.Find("TARGET"));
+                StartCoroutine(Active());
                 GameObject.Find("TARGET").gameObject.SetActive(false);
-
                 break;
-
 
             default:
                 break;
-        
         }
     }
-    
 
-
-    IEnumerator SetTime()
+    IEnumerator Active()
     {
         yield return new WaitForSeconds(0.5f);
         transform.GetChild(1).gameObject.SetActive(false);
 
-        yield return new WaitForSeconds(6.7f);
+        yield return new WaitForSecondsRealtime(4.2f);
         b_crusherFloowing = true;
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSecondsRealtime(1f);
         b_crusherFire = true;
-
     }
+
 }

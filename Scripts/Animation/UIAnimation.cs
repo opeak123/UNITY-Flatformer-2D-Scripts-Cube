@@ -13,13 +13,15 @@ public class UIAnimation : MonoBehaviour
     public void TriggerOpen()
     {
         //Dialogue Manager
-        UIanimator.SetTrigger("open");
+        UIanimator.SetBool("open", true);
+        UIanimator.SetBool("close", false);
     }
 
     public void TriggerClose()
     {
         //Dialogue Manager
-        UIanimator.SetTrigger("close");
+        UIanimator.SetBool("close",true);
+        UIanimator.SetBool("open", false);
     }
 
 }

@@ -39,6 +39,7 @@ public class DialogueManager : MonoBehaviour
     //대화중인지 여부 체크
     public bool pb_isTalking = false;
     //대화중인 현재 스트링 Index
+    [SerializeField]
     private int m_currentIndex = 0;
 
     //Canvas 애니메이션
@@ -59,7 +60,7 @@ public class DialogueManager : MonoBehaviour
     {
         if(pb_isTalking)
         {
-          Talking();
+            Talking();
         }
     }
 
@@ -89,18 +90,21 @@ public class DialogueManager : MonoBehaviour
                 }
                 m_currentIndex++;
             }
-            else
-            {
-                pb_isTalking = false;
-            }
+            //else
+            //{
+            //    m_uiAni.TriggerClose();
+            //    pb_isTalking = false;
+            //}
         }
         //string배열의 text가 마지막배열이라면 인덱스를 처음으로 돌린다
         //현재 UI는 동시에 대화창을 띄워 순서만 바꾸는 형식
         //Text는 두개 모두 동시출력
         if (m_currentIndex == m_string.Length - 1)
         {
-            m_currentIndex++;
-            pb_isTalking = false;
+            m_currentIndex = 0;       //인덱스 처음으로 
+            m_string = new string[0]; //배열 초기화
+            
+            //pb_isTalking = false;
             StartCoroutine(StandbyAction());
             StartCoroutine(UIClose());
 
@@ -117,9 +121,9 @@ public class DialogueManager : MonoBehaviour
     //대화가 끝나고 2초대기 이후 코루틴 실행
     IEnumerator StandbyAction() 
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSecondsRealtime(3f);
+        pb_isTalking = false;
         GameManager.Instance.canMove = true;
-        m_uiAni.TriggerClose();
     }
     IEnumerator UIClose()
     {

@@ -7,9 +7,9 @@ public class ShowCrucherTrigger : MonoBehaviour
 {
     public Image m_yoursImage;
     public Sprite m_crusherImage;
-    public Rigidbody2D m_rigidBody;
+    private Rigidbody2D m_rigidBody;
     private UIAnimation m_uiAni;
-    public int m_cnt = 0;
+    private int m_cnt = 0;
     
 
     private void Start()
@@ -32,7 +32,7 @@ public class ShowCrucherTrigger : MonoBehaviour
                     DialogueManager.Instance.pb_isTalking = true;
                     
                 }
-                m_uiAni.TriggerOpen();
+                //m_uiAni.TriggerOpen();
                 m_rigidBody.gravityScale = 1f;
 
                 break;
@@ -61,6 +61,8 @@ public class ShowCrucherTrigger : MonoBehaviour
     private void DialogueReset()
     {
         DialogueManager.Instance.m_string = new string[5];
+        DialogueManager.Instance.m_textMine.text = "";
+        DialogueManager.Instance.m_textYours.text = "";
         DialogueManager.Instance.m_string[0] = "Watch Out, you almost crushed";
         DialogueManager.Instance.m_string[1] = "Oh,look, a small, unarmed cub Get out of my way!";
         DialogueManager.Instance.m_string[2] = "Can i just get by?";
