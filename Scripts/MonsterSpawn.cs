@@ -5,6 +5,7 @@ using System.IO;
 
 public class MonsterSpawn : MonoBehaviour
 {
+    [SerializeField]
     MonsterInfo monsterInfo;
 
     [SerializeField]
