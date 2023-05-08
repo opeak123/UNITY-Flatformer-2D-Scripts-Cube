@@ -7,7 +7,7 @@ public class SoundManager : MonoBehaviour
     public static SoundManager Instance;
 
     public AudioMixer mixer;
-
+    public AudioClip[] clips;
     public AudioSource[] sfxSources;
     public AudioSource[] bgmSources;
 
@@ -23,8 +23,8 @@ public class SoundManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
 
-        // AudioClip dictionary에 모든 AudioClip을 추가
-        AudioClip[] clips = Resources.LoadAll<AudioClip>("Audio");
+        // AudioClip dictionary에 AudioClip 추가
+        //AudioClip[] clips = Resources.LoadAll<AudioClip>("Audio");
         foreach (AudioClip clip in clips)
         {
             clipDict.Add(clip.name, clip);
