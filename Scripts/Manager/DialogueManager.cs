@@ -53,6 +53,8 @@ public class DialogueManager : MonoBehaviour
         //String √ ±‚»≠
         m_textMine.text = "";
         m_textYours.text = "";
+
+
     }
 
     private void Update()

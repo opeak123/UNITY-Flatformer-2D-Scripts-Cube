@@ -36,7 +36,7 @@ public class ArmoredCrusher : MonoBehaviour
     void CrusherTracePlayer()
     {
         Vector2 targetPosition = new Vector2(m_playerTransform.position.x, m_crucherTransform.position.y);
-        if(b_crusherisGround && b_crusherFloowing && !DialogueManager.Instance.pb_isTalking)
+        if (b_crusherisGround && b_crusherFloowing && !DialogueManager.Instance.pb_isTalking)
         {
             m_crucherTransform.position = Vector2.MoveTowards(m_crucherTransform.position, targetPosition, 0.01f);
         }
@@ -57,6 +57,7 @@ public class ArmoredCrusher : MonoBehaviour
             go.gameObject.transform.parent = m_firePos.transform;
             Rigidbody2D rb = go.GetComponent<Rigidbody2D>();
             rb.velocity = BulletParabola();
+            SoundManager.Instance.PlaySFX("armoredCrusher-fire-sfx", 1f);
             yield return new WaitForSeconds(1f);
             Destroy(go);
         }
@@ -89,6 +90,7 @@ public class ArmoredCrusher : MonoBehaviour
         switch (collision.gameObject.tag)
         {
             case "GROUND":
+                SoundManager.Instance.PlaySFX("armoredCrusher-hit-ground-sfx", 1f);
                 b_crusherisGround = true;
                 transform.GetChild(1).gameObject.SetActive(true);
                 RoadManAnimation.FindObjectOfType<RoadManAnimation>().BooleanFly();
@@ -107,6 +109,7 @@ public class ArmoredCrusher : MonoBehaviour
         transform.GetChild(1).gameObject.SetActive(false);
 
         yield return new WaitForSecondsRealtime(4.2f);
+        SoundManager.Instance.PlaySFX("armoredCrusher-follwing-sfx", 1f);
         b_crusherFloowing = true;
 
         yield return new WaitForSecondsRealtime(1f);

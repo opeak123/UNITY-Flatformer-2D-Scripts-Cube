@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     //플레이어 이동 제한
     public bool canMove = true;
     public bool dead = false;
+    public delegate void PlayerDeathHandler();
+    public static event PlayerDeathHandler OnPlayerDeath;
     # region 싱글톤
     void Awake()
     {
@@ -21,6 +23,16 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
     }
     #endregion
+
+    public static void SetPlayerDead(bool isDead)
+    {
+        GameManager.Instance.dead = isDead;
+
+        if (isDead && OnPlayerDeath != null)
+        {
+            OnPlayerDeath();
+        }
+    }
 
     #region 스테이지
     public GameObject[] stages;
@@ -55,4 +67,5 @@ public class GameManager : MonoBehaviour
         currentStageNum = index;
     }
     #endregion
+
 }

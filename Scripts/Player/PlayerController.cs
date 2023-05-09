@@ -102,6 +102,7 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKey(KeyCode.Space) && !b_isJumping)
             {
                 b_isJumping = true;
+                SoundManager.Instance.PlaySFX("player-jump-sfx", 1f);
                 rb.velocity = Vector2.up * m_jumpForce;
                 playerAnimation.TriggerJump();
             }

@@ -22,6 +22,7 @@ public class DoorAnimation : MonoBehaviour
         doorAni.speed = 1f;
         isDoorOpened = true;
         doorAni.SetTrigger("doorOpen");
+        SoundManager.Instance.PlaySFX("door-open-sfx",.5f);
     }
 
     public void TriggerDoorClose()

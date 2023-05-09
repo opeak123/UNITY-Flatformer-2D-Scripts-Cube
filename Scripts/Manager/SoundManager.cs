@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Audio;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class SoundManager : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class SoundManager : MonoBehaviour
     public AudioClip[] clips;
     public AudioSource[] sfxSources;
     public AudioSource[] bgmSources;
+
+    public Scrollbar m_bgmScrollBar;
+    public Scrollbar m_sfxScrollBar;
 
     public Dictionary<string, AudioClip> clipDict = new Dictionary<string, AudioClip>();
 
@@ -30,6 +34,13 @@ public class SoundManager : MonoBehaviour
             clipDict.Add(clip.name, clip);
         }
     }
+
+    private void Start()
+    {
+        m_bgmScrollBar.onValueChanged.AddListener(SetBGMVolume);
+        m_sfxScrollBar.onValueChanged.AddListener(SetSFXVolume);
+    }
+
 
     public void PlaySFX(string name, float volume)
     {
@@ -70,11 +81,11 @@ public class SoundManager : MonoBehaviour
 
     public void SetSFXVolume(float volume)
     {
-        mixer.SetFloat("SFXVolume", volume);
+        mixer.SetFloat("sfx", Mathf.Lerp(-50, 0, volume));
     }
 
     public void SetBGMVolume(float volume)
     {
-        mixer.SetFloat("BGMVolume", volume);
+        mixer.SetFloat("bgm", Mathf.Lerp(-50, 0, volume));
     }
 }

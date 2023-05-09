@@ -17,7 +17,6 @@ public class FollowTarget : MonoBehaviour
         if (b_isArrived)
         {
             float elapsedTime = Time.time - m_timer;
-            Debug.Log("Elapsed time: " + elapsedTime);
         }
     }
 
