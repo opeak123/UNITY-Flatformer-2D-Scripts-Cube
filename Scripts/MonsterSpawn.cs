@@ -12,15 +12,4 @@ public class MonsterSpawn : MonoBehaviour
     private GameObject m_normalMonsterPrefab;
     [SerializeField]
     private GameObject m_attackMonsterPrefab;
-    private void Awake()
-    {
-
-    }
-
-    private void MonsterSpawner()
-    {
-        Vector2 spawnPos = monsterInfo.monsterPos;
-        MonsterInfo.MonsterType type = MonsterInfo.MonsterType.Normal;
-        float monsterSpeed = monsterInfo.monsterSpeed;
-    }
 }

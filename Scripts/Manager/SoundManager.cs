@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class SoundManager : MonoBehaviour
 {
@@ -12,8 +13,10 @@ public class SoundManager : MonoBehaviour
     public AudioSource[] sfxSources;
     public AudioSource[] bgmSources;
 
-    public Scrollbar m_bgmScrollBar;
-    public Scrollbar m_sfxScrollBar;
+    [SerializeField]
+    private Scrollbar m_bgmScrollBar;
+    [SerializeField]
+    private Scrollbar m_sfxScrollBar;
 
     public Dictionary<string, AudioClip> clipDict = new Dictionary<string, AudioClip>();
 
@@ -37,11 +40,26 @@ public class SoundManager : MonoBehaviour
 
     private void Start()
     {
+        int currentSceneNumber = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+
+        if(currentSceneNumber == 0)
+        {
+            GameObject canvasObject = GameObject.Find("Canvas");
+            GameObject optionsObject = canvasObject.transform.GetChild(5).gameObject;
+            GameObject videoAndSoundObject = optionsObject.transform.GetChild(2).gameObject;
+            GameObject soundObject = videoAndSoundObject.transform.GetChild(2).gameObject;
+            m_bgmScrollBar = soundObject.transform.GetChild(0).GetComponent<Scrollbar>();
+            m_sfxScrollBar = soundObject.transform.GetChild(1).GetComponent<Scrollbar>();
+        }
+        else if(currentSceneNumber == 1)
+        {
+
+        }
+        
         m_bgmScrollBar.onValueChanged.AddListener(SetBGMVolume);
         m_sfxScrollBar.onValueChanged.AddListener(SetSFXVolume);
+
     }
-
-
     public void PlaySFX(string name, float volume)
     {
         // 비어있는 AudioSource를 찾아서 SFX를 재생

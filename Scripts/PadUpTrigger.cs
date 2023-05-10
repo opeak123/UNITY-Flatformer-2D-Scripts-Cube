@@ -38,18 +38,26 @@ public class PadUpTrigger : MonoBehaviour
             if (collision.gameObject.CompareTag("PLAYER")
             && Input.GetKey(KeyCode.UpArrow))
             {
-                if (PlayerController.FindObjectOfType<PlayerController>().pb_isCrouch == false)
+                PlayerController playerController = FindObjectOfType<PlayerController>();
+                if (playerController != null)
                 {
+                    playerController.SetCrouch(false);
                     DialogueManager.Instance.pb_isTalking = true;
                     m_count++;
                     Interact();
                 }
+                //if (FindObjectOfType<PlayerController>().b_isCrouch == false)
+                //{
+                //    DialogueManager.Instance.pb_isTalking = true;
+                //    m_count++;
+                //    Interact();
+                //}
             }
         }
         if (collision.gameObject.CompareTag("PLAYER") && pb_triggerEnd && Input.GetKey(KeyCode.UpArrow))
         {
             Debug.Log("pressed");
-            FadeController.FindObjectOfType<FadeController>().FadeOutIn();
+            FindObjectOfType<FadeController>().FadeOutIn();
             StartCoroutine(NextSceneDelay());
         }
     }
@@ -67,8 +75,8 @@ public class PadUpTrigger : MonoBehaviour
 
     private void Interact()
     {
-        PlayerController.FindObjectOfType<PlayerController>().pb_isCrouch = false;
-        ScreenAnimation.FindObjectOfType<ScreenAnimation>().TriggerMove();
+        FindObjectOfType<PlayerController>().SetCrouch(false);
+        FindObjectOfType<ScreenAnimation>().TriggerMove();
         PlayerAnimation playerAni = FindObjectOfType<PlayerAnimation>();
         playerAni.SetIsGrounded(false);
         playerAni.TriggerLookingUp();
@@ -79,7 +87,8 @@ public class PadUpTrigger : MonoBehaviour
     IEnumerator NextSceneDelay()
     {
         yield return new WaitForSeconds(5f);
-        PlayerController.FindObjectOfType<PlayerController>().gameObject.transform.position = new Vector2(1.553f, 0);
+        FindObjectOfType<PlayerController>().gameObject.transform.position = new Vector2(1.553f, 0);
         GameManager.Instance.isNextStage = true;
+        SoundManager.Instance.PlaySFX("door-open-sfx", 1f);
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class ButtonSelect : MonoBehaviour
+public class InGameButtonSelect : MonoBehaviour
 {
     public Button[] m_buttons;
     public Image m_currSelectedBtn;
@@ -16,7 +16,10 @@ public class ButtonSelect : MonoBehaviour
     }
     void Update()
     {
-        ButtonUpDown();
+        if(GameManager.Instance.pause)
+        {
+            ButtonUpDown();
+        }
     }
 
     private void ButtonUpDown()
@@ -34,7 +37,6 @@ public class ButtonSelect : MonoBehaviour
             m_buttons[m_selectedIndex].Select();
             m_currSelectedBtn.rectTransform.position = m_buttons[m_selectedIndex].gameObject.transform.position;
             SoundManager.Instance.PlaySFX("ui-click2-sfx", .5f);
-
         }
     }
 }

@@ -7,6 +7,7 @@ public class ScreenMode : MonoBehaviour
 
     private void Start()
     {
+
         m_fullScreenselected.onValueChanged.AddListener(ScreenFull);
         m_windowedSeleceted.onValueChanged.AddListener(ScreenWidowed);
     }

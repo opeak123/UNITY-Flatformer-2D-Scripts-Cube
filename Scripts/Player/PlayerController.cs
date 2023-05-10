@@ -19,17 +19,26 @@ public class PlayerController : MonoBehaviour
     private float m_moveInputX;                  //플레이어 X값 키 방향
     private float m_dashTime;                   //플레이어 Dash 시간체크
     private float m_dashPower = 4000f;          //플레이어 Dash 파워
-    private bool b_isDashing = false;     //플레이어 Dash 중인지 체크
-    private bool b_laddering = false;     //플레이어가 사다리에 올랐는지 체크
-    private bool b_isWallSliding = false; //플레이어가 벽에 닿았는지 체크
+    private bool b_isDashing = false;       //플레이어 Dash 중인지 체크
+    private bool b_laddering = false;       //플레이어가 사다리에 올랐는지 체크
+    private bool b_isWallSliding = false;   //플레이어가 벽에 닿았는지 체크
+    private bool b_hasGun = false;              //플레이어가 총을 가졌는지
+    private bool b_isCrouch = false;            //플레이어가 앉았는지
 
-    [HideInInspector]
-    public bool pb_isCrouch = false;      //PadUpScript에서 참조
+    public void SetHasGun(bool hasGun) //캡슐화 
+    {
+        this.b_hasGun = hasGun;
+    }
+
+    public void SetCrouch(bool isCrouch) //캡슐화 
+    {
+        this.b_isCrouch = isCrouch;
+    }
 
     private void Awake()
     {
         //할당
-        m_whatIsGround = LayerMask.GetMask("Ground"); // LayerMask.NameToLayer("Ground");
+        m_whatIsGround = LayerMask.GetMask("Ground");
         m_groundCheck = GetComponent<Transform>();
         rb = GetComponent<Rigidbody2D>();
         playerAnimation = GetComponent<PlayerAnimation>();
@@ -75,7 +84,7 @@ public class PlayerController : MonoBehaviour
         if (b_laddering)
         {
             float moveInputY = Input.GetAxis("Vertical");
-            CameraFollow.FindObjectOfType<CameraFollow>().followTarget = true;
+            FindObjectOfType<CameraFollow>().followTarget = true;
             rb.gravityScale = 0;
             rb.velocity = new Vector2(rb.velocity.x, moveInputY * m_moveSpeed) / 2;
         }
@@ -133,7 +142,7 @@ public class PlayerController : MonoBehaviour
         {
             if (rb.IsTouchingLayers(LayerMask.GetMask("Ground")))
             {
-                pb_isCrouch = true;
+                b_isCrouch = true;
                 rb.constraints = RigidbodyConstraints2D.FreezePosition;
                 playerAnimation.TriggerCrouch();
                 playerAnimation.SetIsGrounded(false);
@@ -142,7 +151,7 @@ public class PlayerController : MonoBehaviour
         //키를 땠을 때 Rigidbody의 제약 해제
         if (Input.GetKeyUp(KeyCode.DownArrow))
         {
-            pb_isCrouch = false;
+            b_isCrouch = false;
             rb.constraints = RigidbodyConstraints2D.None;
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
             playerAnimation.SetIsGrounded(true);

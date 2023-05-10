@@ -28,9 +28,11 @@ public class BombTrigger : MonoBehaviour
         switch (collision.gameObject.tag)
         {
             case "ARMOREDCRUSHER":
+                FindObjectOfType<ArmoredCrusher>().b_crusherFire = false;
                 SoundManager.Instance.PlaySFX("bridge-explosion-sfx", 1f);
                 gameObject.transform.GetChild(0).gameObject.SetActive(true);
                 b_isFade = true;
+                SoundManager.Instance.PlayBGM("Intro-main-bgm", 1f);
                 break;
 
             default:

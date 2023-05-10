@@ -26,6 +26,7 @@ public class SceneManager : MonoBehaviour
     public GameObject m_menu;
     public GameObject m_selected;
     public GameObject m_video;
+    public GameObject m_loadGame;
    
     private void Awake()
     {
@@ -100,6 +101,7 @@ public class SceneManager : MonoBehaviour
             yield return null;
         SoundManager.Instance.bgmSources[0].clip = SoundManager.Instance.clips[4];
         SoundManager.Instance.bgmSources[0].Play();
+        SoundManager.Instance.sfxSources[0].clip = null;
         }
     }
 
@@ -137,6 +139,19 @@ public class SceneManager : MonoBehaviour
         m_menu.SetActive(true);
         m_selected.SetActive(true);
         m_video.SetActive(false);
+    }
+    public void LoadToMenu()
+    {
+        SoundManager.Instance.PlaySFX("ui-click-sfx", .5f);
+        m_intro.SetActive(true);
+        m_loadGame.SetActive(false);
+    }
+
+    public void LoadGame()
+    {
+        SoundManager.Instance.PlaySFX("ui-click-sfx", .5f);
+        m_intro.SetActive(false);
+        m_loadGame.SetActive(true);
     }
 
     public void Quit()

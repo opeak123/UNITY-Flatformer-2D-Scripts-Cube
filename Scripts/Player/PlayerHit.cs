@@ -5,18 +5,21 @@ using UnityEngine;
 public class PlayerHit : MonoBehaviour
 {
 
+
+    //SoundManager.Instance.PlaySFX("player-revive-sfx", 1f);
+
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        switch (collision.gameObject.layer)
+        switch (collision.gameObject.tag)
         {
-            case 10: 
+            case "OBSTACLE":
+                GameManager.Instance.dead = true;
+
                 break;
 
-            case 11:
-                
-                break;
 
-            default:
+            default :
                 break;
         }
 

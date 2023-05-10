@@ -5,7 +5,7 @@ using UnityEngine;
 public class CubeStageThree : MonoBehaviour
 {
     private Vector2 m_target;
-    private float m_random;
+    private float m_moveSpeed = 5f;
 
     private void Start()
     {
@@ -14,8 +14,7 @@ public class CubeStageThree : MonoBehaviour
     }
     void LateUpdate()
     {
-        m_random = Random.Range(0.015f, 0.03f);
-        transform.position = Vector2.MoveTowards(transform.position, m_target, m_random);
+        transform.position = Vector2.MoveTowards(transform.position, m_target, m_moveSpeed * Time.deltaTime);
         transform.parent = GameObject.Find("TARGET").transform;
     }
 }

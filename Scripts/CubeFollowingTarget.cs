@@ -46,7 +46,7 @@ public class CubeFollowingTarget : MonoBehaviour
         }
 
         m_dir = transform.position - m_targets[m_currentTargetIndex].transform.position;
-        transform.position = Vector2.MoveTowards(transform.position, m_targets[m_currentTargetIndex].transform.position, 0.01f * m_moveSpeed);
+        this.transform.position = Vector2.MoveTowards(transform.position, m_targets[m_currentTargetIndex].transform.position, 0.01f * m_moveSpeed * Time.deltaTime);
 
         if (m_dir.x > 0)
         {
@@ -61,7 +61,7 @@ public class CubeFollowingTarget : MonoBehaviour
         {
             m_currentTargetIndex++;
         }
-        m_moveSpeed = Random.Range(0.8f, 1.2f);
+        m_moveSpeed = Random.Range(300f, 500f);
     }
 
     private void OnCollisionStay2D(Collision2D col)

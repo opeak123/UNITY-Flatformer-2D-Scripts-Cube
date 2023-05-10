@@ -10,9 +10,10 @@ public class ArmoredCrusher : MonoBehaviour
     private Animator m_dustAni;
     private Transform m_crucherTransform;
     private Transform m_playerTransform;
+    private float m_moveSpeed = 3f;
     private bool b_crusherisGround = false;
     private bool b_crusherFloowing = false;
-    private bool b_crusherFire = false;
+    public bool b_crusherFire = false;
     Coroutine firingCoroutine;
 
     private void Start()
@@ -38,7 +39,7 @@ public class ArmoredCrusher : MonoBehaviour
         Vector2 targetPosition = new Vector2(m_playerTransform.position.x, m_crucherTransform.position.y);
         if (b_crusherisGround && b_crusherFloowing && !DialogueManager.Instance.pb_isTalking)
         {
-            m_crucherTransform.position = Vector2.MoveTowards(m_crucherTransform.position, targetPosition, 0.01f);
+            m_crucherTransform.position = Vector2.MoveTowards(m_crucherTransform.position, targetPosition, m_moveSpeed * Time.deltaTime);
         }
     }
     void CrusherAttack()
@@ -57,7 +58,10 @@ public class ArmoredCrusher : MonoBehaviour
             go.gameObject.transform.parent = m_firePos.transform;
             Rigidbody2D rb = go.GetComponent<Rigidbody2D>();
             rb.velocity = BulletParabola();
-            SoundManager.Instance.PlaySFX("armoredCrusher-fire-sfx", 1f);
+            if(b_crusherFire)
+            {
+                SoundManager.Instance.PlaySFX("armoredCrusher-fire-sfx", 1f);
+            }
             yield return new WaitForSeconds(1f);
             Destroy(go);
         }
@@ -65,8 +69,8 @@ public class ArmoredCrusher : MonoBehaviour
 
     Vector2 BulletParabola()
     {
-        float angle = -10f; // 발사 각도
-        float speed = 2.2f; // 발사 속력
+        float angle = -20f; // 발사 각도
+        float speed = 3.5f; // 발사 속력
         float gravity = Physics2D.gravity.magnitude; // 중력 가속도
 
         // x 방향으로 일정한 속력

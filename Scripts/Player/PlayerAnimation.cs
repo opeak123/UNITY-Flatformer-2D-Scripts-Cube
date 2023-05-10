@@ -1,26 +1,52 @@
 using UnityEngine;
+using UnityEngine.Animations;
 
+
+[RequireComponent(typeof(PlayerController))]
 [RequireComponent(typeof(Animator))]
 public class PlayerAnimation : MonoBehaviour
 {
+    //플레이어 Controller
+    private PlayerController playerController;
     //플레이어 애니메이션
     private Animator animator;
+    //플레이어 SpriteRenderer
+    public SpriteRenderer m_spriteNone;
+    //플레이어가 변경할 SpriteRenderer
+    public Sprite m_spriteGun;
+    private bool b_hasGun = false;
+    public RuntimeAnimatorController m_defaultController;
+    public RuntimeAnimatorController m_subMachineController;
+
+
     private void Awake()
     {
         //할당
+        playerController = GetComponent<PlayerController>();
         animator = GetComponent<Animator>();
+        m_spriteNone = GetComponent<SpriteRenderer>();
+    }
+    
+    public void SetHasGun(bool hasGun)
+    {
+        this.b_hasGun = hasGun;
+
+        if (hasGun)
+        {
+            animator.runtimeAnimatorController = m_subMachineController;
+            m_spriteNone.sprite = m_spriteGun; 
+        }
     }
 
+    
     public void SetIsGrounded(bool isGrounded) //idle 애니메이션
     {
         animator.SetBool("idle", isGrounded);
     }
-
     public void SetSpeed(float speed)   //walk 애니메이션
     {
         animator.SetFloat("speed", speed);
     }
-
     public void TriggerJump()   //jump 애니메이션
     {
         animator.SetTrigger("jump");
@@ -53,9 +79,6 @@ public class PlayerAnimation : MonoBehaviour
     }
     public void TriggerDead() //dead 애니메이션
     {
-        if (GameManager.Instance.dead)
-        {
-            animator.SetTrigger("dead");
-        }
+        animator.SetTrigger("dead");
     }
 }
