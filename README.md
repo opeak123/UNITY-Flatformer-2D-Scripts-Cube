@@ -1,1 +1,1 @@
-# Edge
+# Edge Planet Cube 
